@@ -3,28 +3,47 @@
   <head>
     <meta charset="utf-8">
     <title>Создание схем по бисероплетению</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   </head>
-  <link rel="stylesheet" href="style.css">
-    
   <body>
-    
-    <input type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#ff0000" style="width:10%;">
-    <select id="tool">
+    <div class="container">
+      <div class="tool-panel">
+        <div class="tool-panel-item">
+          <input type="color" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)" value="#ff0000">
+        </div>
+        <div class="tool-panel-item">
+          <select id="tool">
+            <option value="brush">Кисть</option>
+            <option value="eraser">Ластик</option>
+          </select>
+        </div>
+        <div class="tool-panel-item">
+          <button id="generateGrid">Обновить сетку</button>
+        </div>
+        <div class="tool-panel-item">
+          <div class="tool-panel-input">
+            <label for="height">Высота:</label>
+            <input id="height" type="number" value="25">
+          </div>
+          <div class="tool-panel-input">
+            <label for="width">Ширина:</label>
+            <input id="width" type="number" value="50">
+          </div>
+          <div class="tool-panel-input">
+            <label for="rows">Кол-во строк:</label>
+            <input id="rows" type="number" value="10">
+          </div>
+          <div class="tool-panel-input">
+            <label for="columns">Кол-во столбцов:</label>
+            <input id="columns" type="number" value="10">
+          </div>
+        </div>
+      </div>
+      <div id="stage"></div>
+    </div>
 
-      <option value="brush">Brush</option>
-      <option value="eraser">Eraser</option>
-    </select>
-
-    <button id="generateGrid">Обновить сетку</button>
-    
-    
-    Высота<input id="height" type="number" value="25">
-    Ширина<input id="width" type="number" value="50">
-    <div id="stage"></div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/konva@8.3.1/konva.min.js"></script>
+    <script src="./script.js"></script>
   </body>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/konva@8.3.1/konva.min.js"></script>
-  <script src="./script.js"></script>
 </html>

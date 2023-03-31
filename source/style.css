@@ -1,27 +1,59 @@
-/* Установка шрифта */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 50px auto;
+}
+
+.tool-panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tool-panel-item {
+  margin: 0 10px;
+}
+
+.tool-panel-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.tool-panel-input label {
+  margin-right: 10px;
+}
+
+#stage {
+  border: 1px solid #ccc;
+}
+
+.tool-panel-input label, .tool-panel-input input {
+  width: 100%;
+  display: inline-block;
+}
+
+input[type=number] {
+  width: 50px;
+  height: 24px;
+}
+
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Стили для заголовка */
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  /* Стили для холста */
-  /* #stage {
-    border: 1px solid #ccc;
-    margin-bottom: 1rem;
-  } */
-  
-  /* Стили для бисеров */
-  .konvajs-content {
-    cursor: pointer;
-  }
-  
-  /* Стили для выбранного бисера */
-  .konvajs-content:selected {
-    stroke: #f00;
-    stroke-width: 2;
-  }
+  font-family: 'Montserrat', sans-serif;
+}
+
+input[type="number"], select {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+}
+
+button {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+}
