@@ -1,0 +1,27 @@
+/* Установка шрифта */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Стили для заголовка */
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Стили для холста */
+  #stage {
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }
+  
+  /* Стили для бисеров */
+  .konvajs-content {
+    cursor: pointer;
+  }
+  
+  /* Стили для выбранного бисера */
+  .konvajs-content:selected {
+    stroke: #f00;
+    stroke-width: 2;
+  }
