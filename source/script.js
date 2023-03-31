@@ -27,7 +27,7 @@ for (var i = gridX; i < width; i += cellSize) {
 for (var j = gridY; j < height; j += cellSize) {
   layer.add(new Konva.Line({
     points: [gridX, j, width, j],
-    stroke: '#ddd',
+    stroke: '#000',
     strokeWidth: 1,
     opacity: 0.2
   }));
