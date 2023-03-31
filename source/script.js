@@ -1,5 +1,5 @@
-var width = 1000;
-var height = 1000;
+var width = 500;
+var height = 500;
 
 var stage = new Konva.Stage({
   container: 'stage',
@@ -10,32 +10,67 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
-var cellSize = 50;
+var inputHeight = document.getElementById('height');
+var inputWidth = document.getElementById('width');
+
+var cellSizeWidth = parseInt(inputWidth.value, 10);
+var cellSizeHeight = parseInt(inputHeight.value, 10);
+var updateBtn = document.getElementById('generateGrid');
 var gridX = 0;
 var gridY = 0;
 
-// рисуем сетку на слой!
-for (var i = gridX; i < width; i += cellSize) {
-  for (var j = gridY; j < height; j += cellSize) {
-    var isEvenRow = Math.floor(j / cellSize) % 2 === 0;
-    var offsetX = isEvenRow ? cellSize / 2 : 0;
-    layer.add(new Konva.Rect({
-      x: i + offsetX,
-      y: j,
-      width: cellSize,
-      height: cellSize,
-      fill: '#ccc',
-      stroke: '#000',
-      strokeWidth: 1,
-      opacity: 0.5
-    }));
+
+updateBtn.addEventListener('click', function() {
+  buildGrid();
+});
+// inputWidth.addEventListener('change', function() {
+//   buildGrid();
+// });
+
+function buildGrid() {
+  for (var i = gridX; i < width; i += cellSizeWidth) {
+    for (var j = gridY; j < height; j += cellSizeHeight) {
+      var isEvenRow = Math.round(j / cellSizeHeight) % 2 === 0;
+    
+      var offsetX = isEvenRow ? cellSizeWidth / 2 : 0;
+      layer.add(new Konva.Rect({
+        x: i + offsetX,
+        y: j,
+        width: cellSizeWidth,
+        height: cellSizeHeight,
+        fill: '#ccc',
+        stroke: '#000',
+        strokeWidth: 1,
+        opacity: 1
+      }));
+    }
   }
 }
 
 
+
+// рисуем сетку на слой!
+
+
+
+var isPaint = false;
+
+var mode = 'brush';
+
+
+var colorSelector = document.getElementById('html5colorpicker');
+colorSelector.addEventListener('change', function () {
+  color = colorSelector.value;
+
+
+});
+
+var color = colorSelector.value;
+
+
 stage.on('mousedown touchstart', function () {
   isPaint = true;
-  lastPointerPosition = stage.getPointerPosition();
+  
 });
 
 stage.on('mouseup touchend', function () {
@@ -44,18 +79,46 @@ stage.on('mouseup touchend', function () {
 
 stage.on('mousemove touchmove', function (event) {
   if (isPaint){
-    event.target.fill('#000');
+    
+
+    if (mode === 'eraser') {
+      color = '#ccc'
+
+    }
+
+    
+    event.target.fill(color);
+
+    
+    
   }
 });
 
 stage.on('click', function(event) {
-  
-  
-  
-
-  console.log(event.target.fill());
-  event.target.fill('#000');
-  event.target.on('dragmove', function() {
-      console.log('drug')
-      });
+  event.target.fill(color);
 });
+
+var select = document.getElementById('tool');
+select.addEventListener('change', function () {
+  mode = select.value;
+  color = colorSelector.value;
+});
+
+// var saveButton = document.getElementById('save');
+// saveButton.addEventListener('click', function () {
+//   var json = stage.toJSON();
+//   console.log(json);
+// });
+// var loadButton = document.getElementById('load');
+// loadButton.addEventListener('click', function () {
+//   fetch('./image.json')
+//     .then((response) => response.json())
+//     .then((json) => {
+//       stage = Konva.Node.create(json, 'stage');
+//       // stage.add(layer);
+//   });
+    
+// });
+
+
+
