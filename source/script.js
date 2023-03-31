@@ -16,68 +16,46 @@ var gridY = 0;
 
 // рисуем сетку на слой
 for (var i = gridX; i < width; i += cellSize) {
-  layer.add(new Konva.Line({
-    points: [i, gridY, i, height],
-    stroke: '#000',
-    strokeWidth: 1,
-    opacity: 0.5
-  }));
-}
-
-for (var j = gridY; j < height; j += cellSize) {
-  layer.add(new Konva.Line({
-    points: [gridX, j, width, j],
-    stroke: '#000',
-    strokeWidth: 1,
-    opacity: 0.5
-  }));
-}
-
-stage.on('click', function(event) {
-  // округление координат до ближайшей точки сетки
-//   var x = Math.round((event.evt.offsetX - gridX) / cellSize) * cellSize + gridX;
-//   var y = Math.round((event.evt.offsetY - gridY) / cellSize) * cellSize + gridY;
-    var x = Math.floor((event.evt.offsetX - gridX) / cellSize) * cellSize;
-    var y = Math.floor((event.evt.offsetY - gridY) / cellSize) * cellSize;
-    console.log('x = ', Math.floor((event.evt.offsetX - gridX) / cellSize))
-    console.log('y = ', Math.floor((event.evt.offsetY - gridY) / cellSize))
-
-  // проверка на то, что на этом месте нет бисеринки
-  var isBeadHere = false;
-  layer.find('Rect').forEach(function(rect) {
-    if (rect.x() === x && rect.y() === y) {
-      isBeadHere = true;
-    }
-  });
-
-  if (!isBeadHere) {
-    // создание бисеринки
-    var bead = new Konva.Rect({
-      x: x,
-      y: y,
+  for (var j = gridY; j < height; j += cellSize) {
+    var isEvenRow = Math.floor(j / cellSize) % 2 === 0;
+    var offsetX = isEvenRow ? cellSize / 2 : 0;
+    layer.add(new Konva.Rect({
+      x: i + offsetX,
+      y: j,
       width: cellSize,
       height: cellSize,
-      fill: 'red',
-      stroke: '#555',
-      strokeWidth: 2,
-      draggable: true
-    });
-
-    // добавление бисеринки на слой и на сцену
-    layer.add(bead);
-    stage.add(layer);
-
-    bead.on('dragmove', function() {
-      // определение новых координат бисеринки
-      var newX = Math.round((this.x() - gridX) / cellSize) * cellSize + gridX;
-      var newY = Math.round((this.y() - gridY) / cellSize) * cellSize + gridY;
-      this.position({x: newX, y: newY});
-      layer.draw();
-    });
-
-    bead.on('click', function() {
-      this.remove();
-      layer.draw();
-    });
+      fill: '#ccc',
+      stroke: '#000',
+      strokeWidth: 1,
+      opacity: 0.5
+    }));
   }
+}
+
+
+stage.on('mousedown touchstart', function () {
+  isPaint = true;
+  lastPointerPosition = stage.getPointerPosition();
+});
+
+stage.on('mouseup touchend', function () {
+  isPaint = false;
+});
+
+stage.on('mousemove touchmove', function (event) {
+  if (isPaint){
+    event.target.fill('#000');
+  }
+});
+
+stage.on('click', function(event) {
+  
+  
+  
+
+  console.log(event.target.fill());
+  event.target.fill('#000');
+  event.target.on('dragmove', function() {
+      console.log('drug')
+      });
 });
