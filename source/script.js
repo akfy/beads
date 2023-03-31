@@ -1,5 +1,5 @@
-var width = 500;
-var height = 500;
+var width = 100;
+var height = 100;
 
 var stage = new Konva.Stage({
   container: 'stage',
@@ -13,19 +13,53 @@ stage.add(layer);
 var inputHeight = document.getElementById('height');
 var inputWidth = document.getElementById('width');
 
+
+
 var cellSizeWidth = parseInt(inputWidth.value, 10);
 var cellSizeHeight = parseInt(inputHeight.value, 10);
+
+var exCellSizeWidth = cellSizeWidth;
+var exCellSizeHeight = cellSizeHeight;
+
+inputHeight.addEventListener('change', function() {
+  cellSizeHeight = parseInt(inputHeight.value, 10);
+  console.log(cellSizeHeight);
+});
+inputWidth.addEventListener('change', function() {
+  cellSizeWidth = parseInt(inputWidth.value, 10);
+  console.log(cellSizeWidth);
+});
+
 var updateBtn = document.getElementById('generateGrid');
 var gridX = 0;
 var gridY = 0;
 
 
 updateBtn.addEventListener('click', function() {
-  buildGrid();
+  updateGrid();
 });
 // inputWidth.addEventListener('change', function() {
 //   buildGrid();
 // });
+buildGrid();
+
+
+function updateGrid() {
+  var cells = stage.find('Rect');
+  cells.forEach(function (rect) {
+    var currentX = rect.x();
+    var currentY = rect.y();
+    var newX = currentX + (cellSizeWidth - exCellSizeWidth);
+    var newY = currentY + (cellSizeHeight - exCellSizeHeight);
+    rect.x(newX);
+    rect.y(newY);
+    rect.width(cellSizeWidth);
+    rect.height(cellSizeHeight);
+    
+    
+
+  });
+}
 
 function buildGrid() {
   for (var i = gridX; i < width; i += cellSizeWidth) {
