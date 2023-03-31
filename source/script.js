@@ -14,7 +14,7 @@ var cellSize = 50;
 var gridX = 0;
 var gridY = 0;
 
-// рисуем сетку на слой
+// рисуем сетку на слой!
 for (var i = gridX; i < width; i += cellSize) {
   for (var j = gridY; j < height; j += cellSize) {
     var isEvenRow = Math.floor(j / cellSize) % 2 === 0;
