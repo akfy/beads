@@ -1,5 +1,7 @@
-var width = 100;
-var height = 100;
+var width = 500;
+var height = 500;
+var gridX = 0;
+var gridY = 0;
 
 var stage = new Konva.Stage({
   container: 'stage',
@@ -10,56 +12,35 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
+
+
+
 var inputHeight = document.getElementById('height');
 var inputWidth = document.getElementById('width');
-
-
+var updateBtn = document.getElementById('generateGrid');
 
 var cellSizeWidth = parseInt(inputWidth.value, 10);
 var cellSizeHeight = parseInt(inputHeight.value, 10);
 
-var exCellSizeWidth = cellSizeWidth;
-var exCellSizeHeight = cellSizeHeight;
-
 inputHeight.addEventListener('change', function() {
   cellSizeHeight = parseInt(inputHeight.value, 10);
-  console.log(cellSizeHeight);
+  
 });
 inputWidth.addEventListener('change', function() {
   cellSizeWidth = parseInt(inputWidth.value, 10);
-  console.log(cellSizeWidth);
+  
 });
 
-var updateBtn = document.getElementById('generateGrid');
-var gridX = 0;
-var gridY = 0;
+
+
 
 
 updateBtn.addEventListener('click', function() {
-  updateGrid();
+  
+  buildGrid(); 
 });
-// inputWidth.addEventListener('change', function() {
-//   buildGrid();
-// });
-buildGrid();
 
 
-function updateGrid() {
-  var cells = stage.find('Rect');
-  cells.forEach(function (rect) {
-    var currentX = rect.x();
-    var currentY = rect.y();
-    var newX = currentX + (cellSizeWidth - exCellSizeWidth);
-    var newY = currentY + (cellSizeHeight - exCellSizeHeight);
-    rect.x(newX);
-    rect.y(newY);
-    rect.width(cellSizeWidth);
-    rect.height(cellSizeHeight);
-    
-    
-
-  });
-}
 
 function buildGrid() {
   for (var i = gridX; i < width; i += cellSizeWidth) {
@@ -138,21 +119,7 @@ select.addEventListener('change', function () {
   color = colorSelector.value;
 });
 
-// var saveButton = document.getElementById('save');
-// saveButton.addEventListener('click', function () {
-//   var json = stage.toJSON();
-//   console.log(json);
-// });
-// var loadButton = document.getElementById('load');
-// loadButton.addEventListener('click', function () {
-//   fetch('./image.json')
-//     .then((response) => response.json())
-//     .then((json) => {
-//       stage = Konva.Node.create(json, 'stage');
-//       // stage.add(layer);
-//   });
-    
-// });
+
 
 
 
