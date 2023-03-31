@@ -1,5 +1,5 @@
-var width = window.innerWidth;
-var height = window.innerHeight;
+var width = 1000;
+var height = 1000;
 
 var stage = new Konva.Stage({
   container: 'stage',
@@ -10,7 +10,7 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
-var cellSize = 20;
+var cellSize = 50;
 var gridX = 0;
 var gridY = 0;
 
@@ -35,10 +35,13 @@ for (var j = gridY; j < height; j += cellSize) {
 
 stage.on('click', function(event) {
   // округление координат до ближайшей точки сетки
-  var x = Math.round((event.evt.offsetX - gridX) / cellSize) * cellSize + gridX;
-  var y = Math.round((event.evt.offsetY - gridY) / cellSize) * cellSize + gridY;
-    // var x = Math.round(x / gridSize) * gridSize;
-    // var y = Math.round(y / gridSize) * gridSize;
+//   var x = Math.round((event.evt.offsetX - gridX) / cellSize) * cellSize + gridX;
+//   var y = Math.round((event.evt.offsetY - gridY) / cellSize) * cellSize + gridY;
+    var x = Math.floor((event.evt.offsetX - gridX) / cellSize) * cellSize;
+    var y = Math.floor((event.evt.offsetY - gridY) / cellSize) * cellSize;
+    console.log('x = ', Math.floor((event.evt.offsetX - gridX) / cellSize))
+    console.log('y = ', Math.floor((event.evt.offsetY - gridY) / cellSize))
+
   // проверка на то, что на этом месте нет бисеринки
   var isBeadHere = false;
   layer.find('Rect').forEach(function(rect) {

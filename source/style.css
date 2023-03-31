@@ -10,10 +10,10 @@ body {
   }
   
   /* Стили для холста */
-  #stage {
+  /* #stage {
     border: 1px solid #ccc;
     margin-bottom: 1rem;
-  }
+  } */
   
   /* Стили для бисеров */
   .konvajs-content {
