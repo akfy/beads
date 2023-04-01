@@ -20,6 +20,7 @@ var inputWidth = document.getElementById('width');
 var inputRows = document.getElementById('rows');
 var inputColumns = document.getElementById('columns');
 var updateBtn = document.getElementById('generateGrid');
+var undoBtn = document.getElementById('undo');
 
 var cellSizeWidth = parseInt(inputWidth.value, 10);
 var cellSizeHeight = parseInt(inputHeight.value, 10);
@@ -43,6 +44,11 @@ inputColumns.addEventListener('change', function() {
 updateBtn.addEventListener('click', function() {
   layer.destroyChildren();
   buildGrid();
+  saveHistory();
+});
+
+undoBtn.addEventListener('click', function() {
+  undo()
 });
 
 function buildGrid() {
@@ -69,6 +75,11 @@ var mode = 'brush';
 var colorSelector = document.getElementById('html5colorpicker');
 var color = colorSelector.value;
 
+//appHistory
+var appHistory = [];
+var historyIndex = -1;
+var maxHistoryLength = 10;
+
 colorSelector.addEventListener('change', function () {
   color = colorSelector.value;
 });
@@ -90,9 +101,54 @@ stage.on('mousemove touchmove', function (event) {
 });
 stage.on('click', function(event) {
   event.target.fill(color);
+  //save history
+  saveHistory();
 });
 var select = document.getElementById('tool');
-select.addEventListener('change', function () {
-  mode = select.value;
-  color = colorSelector.value;
+  select.addEventListener('change', function () {
+    mode = select.value;
+    color = colorSelector.value;
 });
+
+function saveHistory() {
+  // Remove any future appHistory
+  appHistory.splice(historyIndex + 1, appHistory.length - historyIndex - 1);
+  // Add current state to appHistory
+  appHistory.push(layer.toJSON());
+  // Limit appHistory length
+  if (appHistory.length > maxHistoryLength) {
+   appHistory.shift();
+  }
+  // Update appHistory index
+  historyIndex = appHistory.length - 1;
+}
+
+function undo() {
+  if (historyIndex > 0) {
+    historyIndex--;
+    layer.destroyChildren();
+    var historyJSON = appHistory[historyIndex];
+    if (historyJSON) {
+      try {
+        var nodes = Konva.Node.create(historyJSON);
+        if (nodes) { // проверяем, что nodes был успешно создан
+          
+          var rects = nodes.getChildren(function(node){
+            return node.getClassName() === 'Rect';
+          });
+         console.log(rects);
+          for (var i = 0; i < rects.length; i++) {
+            layer.add(rects[i]);
+          }
+          layer.draw();
+        } else {
+          console.error('Failed to create nodes from history');
+        }
+      } catch (error) {
+        console.error('Error creating nodes from history:', error);
+      }
+    } else {
+      console.error('History data is undefined');
+    }
+  }
+}
