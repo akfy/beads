@@ -77,6 +77,7 @@ var color = colorSelector.value;
 
 //appHistory
 var appHistory = [];
+var changedRects = [];
 var historyIndex = -1;
 var maxHistoryLength = 10;
 
@@ -84,14 +85,13 @@ colorSelector.addEventListener('change', function () {
   color = colorSelector.value;
 });
 
-stage.on('mousedown touchstart', function () {
+layer.on('mousedown', function () {
   isPaint = true;
 });
-
-stage.on('mouseup touchend', function () {
+layer.on('mouseup', function () {
   isPaint = false;
 });
-stage.on('mousemove touchmove', function (event) {
+layer.on('mousemove', function (event) {
   if (isPaint){
     if (mode === 'eraser') {
       color = '#ccc';
@@ -99,9 +99,10 @@ stage.on('mousemove touchmove', function (event) {
     event.target.fill(color);
   }
 });
-stage.on('click', function(event) {
+layer.on('click', function(event) {
   event.target.fill(color);
   //save history
+  checkChangedColors(); 
   saveHistory();
 });
 var select = document.getElementById('tool');
@@ -110,45 +111,53 @@ var select = document.getElementById('tool');
     color = colorSelector.value;
 });
 
-function saveHistory() {
+function saveHistory(x, y, fill) {
   // Remove any future appHistory
   appHistory.splice(historyIndex + 1, appHistory.length - historyIndex - 1);
   // Add current state to appHistory
-  appHistory.push(layer.toJSON());
+  appHistory.push(changedRects);
+  console.log(appHistory)
   // Limit appHistory length
   if (appHistory.length > maxHistoryLength) {
    appHistory.shift();
   }
   // Update appHistory index
   historyIndex = appHistory.length - 1;
+  // Drop changedRects
+  changedRects = []
 }
 
 function undo() {
   if (historyIndex > 0) {
     historyIndex--;
     layer.destroyChildren();
-    var historyJSON = appHistory[historyIndex];
-    if (historyJSON) {
-      try {
-        var nodes = Konva.Node.create(historyJSON);
-        if (nodes) { // проверяем, что nodes был успешно создан
-          
-          var rects = nodes.getChildren(function(node){
-            return node.getClassName() === 'Rect';
-          });
-         console.log(rects);
-          for (var i = 0; i < rects.length; i++) {
-            layer.add(rects[i]);
-          }
-          layer.draw();
-        } else {
-          console.error('Failed to create nodes from history');
-        }
-      } catch (error) {
-        console.error('Error creating nodes from history:', error);
-      }
-    } else {
-      console.error('History data is undefined');
+    buildGrid();
+    for (var i = 0; i < appHistory[historyIndex].length; i++) {
+      layer.add(new Konva.Rect({
+        width: cellSizeWidth,
+        height: cellSizeHeight,
+        x: appHistory[historyIndex][i].x,
+        y: appHistory[historyIndex][i].y,
+        fill: appHistory[historyIndex][i].fill,
+        stroke: '#000',
+        strokeWidth: 1,
+        opacity: 1
+      }));
     }
   }
+  console.log(appHistory)
+}
+
+function checkChangedColors() {
+  //Loop through all the rectangles and check their fill color property
+  layer.getChildren((node) => {
+    if (node.getClassName() === "Rect" && node.fill() === color) {
+      if (color != '#ccc') {
+        x = node.x();
+        y = node.y();
+        fill = node.fill()
+        changedRects.push({x, y, fill});
+      }
+    }
+  });
 }
